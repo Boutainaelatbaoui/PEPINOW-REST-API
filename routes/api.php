@@ -19,14 +19,7 @@ Route::post('/register',[AuthController::class,'register']);
 Route::post('/login',[AuthController::class,'login']);
 
 Route::group(['middleware' => 'auth:api'], function() {
-    Route::post('/profile',[AuthController::class,'profile']);
+    Route::post('/profile',[AuthController::class,'userProfile']);
     Route::post('/refresh',[AuthController::class,'refresh']);
-    Route::post('/resetPassword',[UserController::class,'resetPassword']);
-    Route::put('/update',[UserController::class,'updateProfile']);
-    Route::post('/logout',[UserController::class,'logout']);
-    Route::get('/showAlbums',[AlbumController::class,'index']);
-    Route::get('/showArtists',[ArtistController::class,'index']);
-    Route::apiResource('lyrics', LyricsController::class);
-
-
+    Route::post('/logout',[AuthController::class,'logout']);
 });
