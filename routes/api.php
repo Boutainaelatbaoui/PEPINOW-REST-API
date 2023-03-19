@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PlantController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,4 +25,5 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('/updateProfile',[AuthController::class,'update']);
     Route::post('/refresh',[AuthController::class,'refresh']);
     Route::post('/logout',[AuthController::class,'logout']);
+    Route::apiResource('plants', PlantController::class);
 });
