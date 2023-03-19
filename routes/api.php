@@ -17,9 +17,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register',[AuthController::class,'register']);
 Route::post('/login',[AuthController::class,'login']);
+Route::post('/resetPassword',[AuthController::class,'resetPassword']);
 
 Route::group(['middleware' => 'auth:api'], function() {
     Route::post('/profile',[AuthController::class,'userProfile']);
+    Route::post('/updateProfile',[AuthController::class,'update']);
     Route::post('/refresh',[AuthController::class,'refresh']);
     Route::post('/logout',[AuthController::class,'logout']);
 });

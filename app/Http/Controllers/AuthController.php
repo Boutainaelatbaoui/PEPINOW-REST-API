@@ -69,4 +69,56 @@ class AuthController extends Controller
         ]);
     }
 
+    function resetPassword(Request $request){
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        } else {
+            $validator = Validator::make($request->all(), [
+                'new_password' => 'required|min:8|confirmed',
+            ]);
+    
+            if ($validator->fails()) {
+                return response()->json([
+                    'error'=>$validator->errors()
+                ]);
+            }
+            $user->update([
+                'password'=>Hash::make($request->new_password)
+            ]);
+            return response()->json([
+                'message'=>'password reseted successfully'
+            ]);
+        }
+    }
+
+    public function update(Request $request)
+    {
+        $user = auth()->user();
+
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users,email,'.$user->id,
+            'password' => 'sometimes|required|min:6',
+        ]);
+
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+
+        if ($request->has('password')) {
+            $user->password = Hash::make($request->input('password'));
+        }
+
+        $user->save();
+
+        return response()->json(['message' => 'User profile updated successfully',
+        'user' => $user,
+        ]);
+    }
+
 }
