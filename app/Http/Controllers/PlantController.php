@@ -26,14 +26,6 @@ class PlantController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -75,7 +67,17 @@ class PlantController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $plant = Plant::find($id);
+
+        if (!$plant) {
+            return response()->json(['message' => 'Plant not found'], 404);
+        }
+
+        return response()->json([
+        "success" => true,
+        "message" => "Plant retrieved successfully.",
+        "data" => $plant
+        ], 200);
     }
 
     /**
