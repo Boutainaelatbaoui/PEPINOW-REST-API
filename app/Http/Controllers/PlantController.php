@@ -72,7 +72,7 @@ class PlantController extends Controller
         if (!$plant) {
             return response()->json(['message' => 'Plant not found'], 404);
         }
-
+        
         return response()->json([
         "success" => true,
         "message" => "Plant retrieved successfully.",
