@@ -81,19 +81,39 @@ class PlantController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $plant = Plant::find($id);
+        if (!$plant) {
+            return response()->json(['message' => 'Plant not found'], 404);
+        }
+
+        $validator = Validator::make($request->all(),[
+            'name' => 'required | string',
+            'image' => 'required|string',
+            'description' => 'required',
+            'category_id' => 'required|exists:categories,id',
+            'price' => 'required|numeric',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors(), 400);       
+        }
+
+        $plant->name = $request->name;
+        $plant->description = $request->description;
+        $plant->categorie_id = $request->category_id;
+        $plant->price = $request->price;
+        $plant->image = $request->image;
+
+        $plant->save();
+        return response()->json([
+        "success" => true,
+        "message" => "Plant updated successfully.",
+        "data" => $plant
+        ], 201);
     }
 
     /**
