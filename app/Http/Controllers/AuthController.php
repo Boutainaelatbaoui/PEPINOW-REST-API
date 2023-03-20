@@ -49,15 +49,15 @@ class AuthController extends Controller
 
     public function logout() {
         auth()->logout();
-        return response()->json(['message' => 'User successfully signed out']);
+        return response()->json(['message' => 'User successfully signed out'], 200);
     }
 
     public function userProfile() {
-        return response()->json(auth()->user());
+        return response()->json(auth()->user(), 200);
     }
 
     public function refresh() {
-        return $this->createNewToken(auth()->refresh());
+        return $this->createNewToken(auth()->refresh(), 200);
     }
 
     protected function createNewToken($token){
@@ -93,7 +93,7 @@ class AuthController extends Controller
             ]);
             return response()->json([
                 'message'=>'password reseted successfully'
-            ]);
+            ], 201);
         }
     }
 
@@ -118,7 +118,7 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'User profile updated successfully',
         'user' => $user,
-        ]);
+        ], 201);
     }
 
 }

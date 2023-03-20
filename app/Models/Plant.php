@@ -10,7 +10,7 @@ class Plant extends Model
     use HasFactory;
     protected $fillable = ['name', 'image', 'description', 'categorie_id'];
 
-    protected $hidden = ['categorie_id'];
+    // protected $hidden = ['categorie_id'];
 
     public function category(){
         return $this->belongsTo(Category::class);
