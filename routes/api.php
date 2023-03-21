@@ -28,4 +28,5 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('/logout',[AuthController::class,'logout']);
     Route::apiResource('plants', PlantController::class);
     Route::apiResource('categories', CategoryController::class);
+    Route::get('plants/categories/{id}', [PlantController::class, 'filterByCategory']);
 });

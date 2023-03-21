@@ -131,8 +131,26 @@ class PlantController extends Controller
             "message" => "Plant deleted successfully.",
             "data" => $plant
         ], 200);
-
-
-
     }
+
+    public function filterByCategory($category)
+    {
+        if (is_numeric($category)) {
+            // Filter by category ID
+            $plant = Plant::where('categorie_id', $category)->get();
+        } else {
+            // Filter by category name
+            $plant = Plant::join('categories', 'plants.categorie_id', '=', 'categories.id')
+                    ->select('plants.*', 'categories.name as category')
+                    ->where('categories.name', $category)
+                    ->get();
+        }
+
+        if ($plant->isEmpty()) {
+            return response()->json(['message' => 'Not found'], 404);
+        }
+
+        return response()->json($plant, 200);
+    }
+
 }
