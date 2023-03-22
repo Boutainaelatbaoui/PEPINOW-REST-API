@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use App\Models\User;
 use GuzzleHttp\Psr7\Response;
