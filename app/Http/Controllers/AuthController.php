@@ -122,4 +122,27 @@ class AuthController extends Controller
         ], 201);
     }
 
+    public function index()
+    {
+        $users = User::with('roles', 'permissions')->get();
+        return response()->json($users);
+    }
+
+    public function assignRolesAndPermissions(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $roles = $request->input('roles');
+        if ($roles) {
+            $user->syncRoles($roles);
+        }
+
+        $permissions = $request->input('permissions');
+        if ($permissions) {
+            $user->syncPermissions($permissions);
+        }
+
+        return response()->json(['message' => 'Roles and permissions assigned successfully']);
+    }
+
 }

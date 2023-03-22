@@ -31,9 +31,11 @@ Route::group(['middleware' => 'auth:api'], function() {
 Route::middleware(['auth', 'checkAdminRole'])->group(function () {
     Route::apiResource('categories', CategoryController::class);
     Route::get('getPlants', [PlantController::class, "index"]);
-    Route::get('plants/{id}', [PlantController::class, "show"]);
-    Route::put('plants/{id}', [PlantController::class, "update"]);
-    Route::delete('plants/{id}', [PlantController::class, "destroy"]);
+    Route::get('showPlants/{id}', [PlantController::class, "show"]);
+    Route::put('updatePlants/{id}', [PlantController::class, "update"]);
+    Route::delete('deletePlants/{id}', [PlantController::class, "destroy"]);
+    Route::get('users',[AuthController::class,'index']);
+    Route::post('assign/{id}',[AuthController::class,'assignRolesAndPermissions']);
 });
 
 Route::middleware(['auth', 'checkSellerRole'])->group(function () {
@@ -42,4 +44,6 @@ Route::middleware(['auth', 'checkSellerRole'])->group(function () {
 
 Route::middleware(['auth', 'checkUserRole'])->group(function () {
     Route::get('plants/categories/{id}', [PlantController::class, 'filterByCategory']);
+    Route::get('viewPlants', [PlantController::class, "index"]);
+    Route::get('viewPlants/{id}', [PlantController::class, "show"]);
 });
