@@ -132,6 +132,15 @@ class AuthController extends Controller
     {
         $user = User::findOrFail($id);
 
+        $validator = Validator::make($request->all(), [
+            'roles' => 'required',
+            'permissions' => 'sometimes',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
         $roles = $request->input('roles');
         if ($roles) {
             $user->syncRoles($roles);
@@ -145,4 +154,39 @@ class AuthController extends Controller
         return response()->json(['message' => 'Roles and permissions assigned successfully']);
     }
 
+    public function updateRolesAndPermissions(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'roles' => 'required',
+            'permissions' => 'sometimes',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
+        $roles = $request->input('roles');
+        if ($roles) {
+            $user->syncRoles($roles);
+        }
+
+        $permissions = $request->input('permissions');
+        if ($permissions) {
+            $user->syncPermissions($permissions);
+        }
+
+        return response()->json(['message' => 'Roles and permissions updated successfully']);
+    }
+
+    public function deleteRolesAndPermissions(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $user->roles()->detach();
+        $user->permissions()->detach();
+
+        return response()->json(['message' => 'Roles and permissions deleted successfully']);
+    }
 }

@@ -17,7 +17,6 @@ class PermissionsSeeder extends Seeder
     {
         Role::create(['name' => 'admin']);
         Role::create(['name' => 'seller']);
-        Role::create(['name' => 'user']);
 
         Permission::create(['name' => 'manage plants']);
         Permission::create(['name' => 'consult plants']);
@@ -31,7 +30,6 @@ class PermissionsSeeder extends Seeder
 
         Role::findByName('admin')->givePermissionTo(['manage roles', 'manage permissions', 'update plants', 'delete plants', 'manage categories']);
         Role::findByName('seller')->givePermissionTo(['manage plants']);
-        Role::findByName('user')->givePermissionTo(['consult plants', 'filter by categories', 'view plant']);
 
         $user = \App\Models\User::factory()->create([
             'name' => 'Boutaina',
