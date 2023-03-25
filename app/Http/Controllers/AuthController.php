@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use App\Models\User;
 use GuzzleHttp\Psr7\Response;
@@ -102,11 +101,15 @@ class AuthController extends Controller
     {
         $user = auth()->user();
 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email,'.$user->id,
-            'password' => 'sometimes|required|min:6',
+            'password' => 'sometimes|required|min:8',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
 
         $user->name = $request->input('name');
         $user->email = $request->input('email');
@@ -122,71 +125,71 @@ class AuthController extends Controller
         ], 201);
     }
 
-    public function index()
-    {
-        $users = User::with('roles', 'permissions')->get();
-        return response()->json($users);
-    }
+    // public function index()
+    // {
+    //     $users = User::with('roles', 'permissions')->get();
+    //     return response()->json($users);
+    // }
 
-    public function assignRolesAndPermissions(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
+    // public function assignRolesAndPermissions(Request $request, $id)
+    // {
+    //     $user = User::findOrFail($id);
 
-        $validator = Validator::make($request->all(), [
-            'roles' => 'required',
-            'permissions' => 'sometimes',
-        ]);
+    //     $validator = Validator::make($request->all(), [
+    //         'roles' => 'required',
+    //         'permissions' => 'sometimes',
+    //     ]);
 
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 422);
-        }
+    //     if ($validator->fails()) {
+    //         return response()->json(['error' => $validator->errors()], 422);
+    //     }
 
-        $roles = $request->input('roles');
-        if ($roles) {
-            $user->syncRoles($roles);
-        }
+    //     $roles = $request->input('roles');
+    //     if ($roles) {
+    //         $user->syncRoles($roles);
+    //     }
 
-        $permissions = $request->input('permissions');
-        if ($permissions) {
-            $user->syncPermissions($permissions);
-        }
+    //     $permissions = $request->input('permissions');
+    //     if ($permissions) {
+    //         $user->syncPermissions($permissions);
+    //     }
 
-        return response()->json(['message' => 'Roles and permissions assigned successfully']);
-    }
+    //     return response()->json(['message' => 'Roles and permissions assigned successfully']);
+    // }
 
-    public function updateRolesAndPermissions(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
+    // public function updateRolesAndPermissions(Request $request, $id)
+    // {
+    //     $user = User::findOrFail($id);
 
-        $validator = Validator::make($request->all(), [
-            'roles' => 'required',
-            'permissions' => 'sometimes',
-        ]);
+    //     $validator = Validator::make($request->all(), [
+    //         'roles' => 'required',
+    //         'permissions' => 'sometimes',
+    //     ]);
 
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 422);
-        }
+    //     if ($validator->fails()) {
+    //         return response()->json(['error' => $validator->errors()], 422);
+    //     }
 
-        $roles = $request->input('roles');
-        if ($roles) {
-            $user->syncRoles($roles);
-        }
+    //     $roles = $request->input('roles');
+    //     if ($roles) {
+    //         $user->syncRoles($roles);
+    //     }
 
-        $permissions = $request->input('permissions');
-        if ($permissions) {
-            $user->syncPermissions($permissions);
-        }
+    //     $permissions = $request->input('permissions');
+    //     if ($permissions) {
+    //         $user->syncPermissions($permissions);
+    //     }
 
-        return response()->json(['message' => 'Roles and permissions updated successfully']);
-    }
+    //     return response()->json(['message' => 'Roles and permissions updated successfully']);
+    // }
 
-    public function deleteRolesAndPermissions(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
+    // public function deleteRolesAndPermissions(Request $request, $id)
+    // {
+    //     $user = User::findOrFail($id);
 
-        $user->roles()->detach();
-        $user->permissions()->detach();
+    //     $user->roles()->detach();
+    //     $user->permissions()->detach();
 
-        return response()->json(['message' => 'Roles and permissions deleted successfully']);
-    }
+    //     return response()->json(['message' => 'Roles and permissions deleted successfully']);
+    // }
 }

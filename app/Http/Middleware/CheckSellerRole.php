@@ -11,7 +11,8 @@ class CheckSellerRole
     public function handle(Request $request, Closure $next)
     {
         if (!$request->user()->hasRole('seller')) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'Only sellers have this role
+            '], 401);
         }
 
         return $next($request);
