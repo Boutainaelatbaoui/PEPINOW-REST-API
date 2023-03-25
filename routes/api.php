@@ -38,9 +38,7 @@ Route::middleware(['auth', 'checkAdminRole'])->group(function () {
     Route::put('updatePlants/{id}', [PlantController::class, "update"]);
     Route::delete('deletePlants/{id}', [PlantController::class, "destroy"]);
     Route::get('users',[AuthController::class,'index']);
-    Route::post('assignRoles/{id}',[AuthController::class,'assignRolesAndPermissions']);
-    Route::put('updateRoles/{id}',[AuthController::class,'updateRolesAndPermissions']);
-    Route::delete('deleteRoles/{id}',[AuthController::class,'deleteRolesAndPermissions']);
+    Route::put('users/updateRole/{id}',[AuthController::class,'updateRole']);
 });
 
 Route::middleware(['auth', 'checkSellerRole'])->group(function () {
